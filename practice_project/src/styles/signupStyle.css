@@ -1,0 +1,42 @@
+ .bodyStyle {
+     background-color: lightgray;
+ }
+
+ .containerStyle {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     height: 100vh;
+ }
+
+ .subcontainerStyle {
+     background-color:white;
+     padding: 50px;
+     border-radius: 20px;
+     box-shadow:3px 3px 3px 3px lightcoral;
+ }
+
+ .orangedivStyle {
+     justify-content: center;
+     flex-direction: column;
+     display: flex;
+ }
+
+ .textStyle {
+     align-self: center;
+ }
+
+ .labelStyle {
+     margin-top: 10px;
+ }
+
+ .fontStyle {
+     font-weight: bold;
+     font-size: medium;
+ }
+ .inputStyle{
+    box-shadow: 1px 1px lightpink;
+ }
+ .buttonStyle {
+    background-color: orange;
+ }

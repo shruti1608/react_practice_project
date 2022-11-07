@@ -1,0 +1,17 @@
+.moviecontainerStyle{
+    padding: 50px 
+}
+.moviesubcontainerStyle {
+    display: flex;
+    justify-content: center;
+    flex-direction: row
+}
+.movieinputStyle {
+    margin-right: 50px
+}
+.movieselectStyle {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 50px;
+    width: 80px;
+}
