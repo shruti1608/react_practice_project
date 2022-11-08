@@ -52,13 +52,33 @@ const vname = { name:name,password:password,age:parseInt(age)}
 
 
 
+// export const getmoviescall = ({
+//   limit,
+//   sortData = "genres",
+//   sortOrder = "asc",
+//   searchText = "",
+//   skipData,
+// }) => {
+//   const params = { sort: sortData, sortOrder: sortOrder };
+//   if (limit) params["limit"] = limit;
+//   if (searchText) params["searchText"] = searchText;
+//   if (skipData) params["skip"] = skipData;
+//   return axiosUrl
+//     .get("/movies", {
+//       headers: { Authorization: `Bearer ${token}` },
+//       params,
+//     })
+    
+// };
+
 export const getmoviescall = ({
   limit,
-  sortData = "genres",
+  sortData ="genres",
   sortOrder = "asc",
-  searchText = "",
+  searchText,
   skipData,
 }) => {
+  console.log(limit,sortData,sortOrder,searchText,skipData)
   const params = { sort: sortData, sortOrder: sortOrder };
   if (limit) params["limit"] = limit;
   if (searchText) params["searchText"] = searchText;

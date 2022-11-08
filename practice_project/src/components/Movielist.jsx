@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery ,useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect } from "react";
+
 import { useState } from "react";
 import { getmoviescall} from "../apicalls";
 import "../styles/moviefilterStyle.css";
 import Movieresult from "./Movieresult";
+
 
 export default function Movielist() {
   const [searchText, setSearchtext] = useState("");
@@ -12,14 +13,17 @@ export default function Movielist() {
   const [sortData, setSortdata] = useState("genres");
   const [sortOrder, setSortorder] = useState("asc");
   const [skipData, setSkipdata] = useState();
-  const [movielist, setmovielist] = useState([]);
+ 
 
-  // const {data:movie} = useQuery(["movies-list"], getmoviescall);
-  // console.log("movie", movie.data[0].title);
+  const queryClient = useQueryClient();
+
+ const {data:movielist} = useQuery(["movies-list"], getmoviescall);
+ 
+//  console.log("movie-", movielist.data.map(item => item));
 //  const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-//   // movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
+//   movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
 
-//   // console.log("movielist",movielist)
+  // console.log("movielist",movielist)
  
 
   function getmovies(e) {
@@ -31,13 +35,16 @@ export default function Movielist() {
       searchText,
       parseInt(skipData),
     ]);
-    // getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+    getmoviescall({limit,sortData,sortOrder,searchText,skipData})
     const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-    movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
+   // movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
+   movie.then((body) =>  {console.log(body);
+     queryClient.setQueryData(["movies-list"],body)
+  })
   
-    
-   
   }
+
+  
   console.log("movielist",movielist)
   return (
     <div className="moviecontainerStyle">
@@ -94,10 +101,12 @@ export default function Movielist() {
       </div>
       <div>
       {movielist != null ? 
-      <>
-           {movielist.map(item => {
+      <><div className="row">
+           {movielist.data.map(item => {
             return <Movieresult title={item['title']} poster={item['poster']} plot={item['plot']}/>
+           
           })}
+           </div>
           </>
  
       : null}
