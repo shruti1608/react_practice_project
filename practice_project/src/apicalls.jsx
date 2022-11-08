@@ -1,10 +1,14 @@
 import axios from "axios";
 
 let token = "";
+const axiosUrl = axios.create({
+  //baseURL : "http://34.208.44.89:3006"
+  baseURL: process.env.REACT_APP_API_URL
+})
 
 export const signupcall = ([age, name, email, password]) => {
-  axios
-    .post("http://34.208.44.89:3006/auth/signup", {
+  axiosUrl
+    .post("/auth/signup", {
       age: parseInt(age),
       name: name,
       email: email,
@@ -14,8 +18,8 @@ export const signupcall = ([age, name, email, password]) => {
 };
 
 export const sigincall = ([email, password]) => {
-  axios
-    .post("http://34.208.44.89:3006/auth/login", {
+  axiosUrl
+    .post("/auth/login", {
       username: email,
       password: password,
     })
@@ -26,40 +30,51 @@ export const sigincall = ([email, password]) => {
 };
 
 // export const getmoviescall = () => {
-//   axios
-//     .get("http://34.208.44.89:3006/movies", {
-//       params:{limit: limit,
-//         sort: sortData,
-//         sortOrder: sortOrder,
-//         searchText: searchText,
-//         skip: skipData},
+ 
+//   return axiosUrl
+//     .get("/movies", {
 //       headers: { Authorization: `Bearer ${token}` },
+//       params:{
+//         sort:"genres",sortOrder:"asc"
+//       }
+      
 //     })
-//     .then((res) => console.log(res.data));
+    
 // };
 
-export const getusercall = () => {
- return axios.get("http://34.208.44.89:3006/user/currentuser", {
+export const updateuser = ([name,password,age]) => {
+const vname = { name:name,password:password,age:parseInt(age)}
+  return axiosUrl.put('/user',vname, {
     headers: { Authorization: `Bearer ${token}` },
-  }).then(res => console.log(res.data));
+    
+      })
 }
 
 
 
+export const getmoviescall = ({
+  limit,
+  sortData = "genres",
+  sortOrder = "asc",
+  searchText = "",
+  skipData,
+}) => {
+  const params = { sort: sortData, sortOrder: sortOrder };
+  if (limit) params["limit"] = limit;
+  if (searchText) params["searchText"] = searchText;
+  if (skipData) params["skip"] = skipData;
+  return axiosUrl
+    .get("/movies", {
+      headers: { Authorization: `Bearer ${token}` },
+      params,
+    })
+    
+};
 
 
+export const getusercall = () => {
+  return axiosUrl.get("/user/currentuser", {
+     headers: { Authorization: `Bearer ${token}` },
+   })
+ }
 
-
-
-// const instance = axios.create((config) => ({
-// baseURL: process.env.REACT_APP_API_URL,
-// headers: {
-// Authorization: token ? `Bearer $(token)` : null,
-// },
-// }));
-// export const storeJwt = (token) => {
-// instance.interceptors.request.use((req) => {
-// req.headers.Authorization = `Bearer ${token}`;
-// return req;
-// });
-// };

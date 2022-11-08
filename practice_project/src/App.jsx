@@ -3,13 +3,11 @@ import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Updateuserprofile from "./components/Updateuserprofile";
-import { useQuery } from "@tanstack/react-query";
-import { getusercall } from "./apicalls";
+
 
 function App() {
 
-  // const {data : User } = useQuery(["user"],getusercall)
-  // console.log("user",User)
+  
   return (
     <BrowserRouter>
    

@@ -12,8 +12,8 @@ export default function Userlogo(){
         //     }
         //   );
 
-        const {data } = useQuery(["user"],getusercall)
-        console.log("data",data)
+        const {data:User} = useQuery(["user-data"],getusercall)
+        console.log("user",User)
 
           return(
             <div
@@ -27,8 +27,8 @@ export default function Userlogo(){
    
             <Gravatar
               style={{ width: "2rem", height: "2rem" }}
-              // title={data.data.name}
-              // email={data.data.email}
+              title={User?.data.name}
+              email={User?.data.email}
             />
             <NavLink to='/updateuser' style={{color:"black"}}>editprofile</NavLink>
             </div>

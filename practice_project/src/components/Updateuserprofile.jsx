@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import {updateuser} from "../apicalls";
 
 
 export default function Updateuserprofile(){
@@ -15,19 +16,12 @@ export default function Updateuserprofile(){
 
   
  
-  const Updateuser = useMutation(
-    ([name,password,age]) => {
-      return axios.put('http://34.208.44.89:3006/user', {
-            name: name,
-            password:password,
-            age: parseInt(age),
-            
-          })
-    },   
-  );
+  const Updateuser = useMutation(updateuser);
+
   function editprofileSubmit(e){
     e.preventDefault();
     Updateuser.mutate([name,password,age])
+    navigate('/dashboard')
   }
 
     return(

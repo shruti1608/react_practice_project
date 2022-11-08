@@ -1,33 +1,44 @@
-
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
-import { getmoviescall } from "../apicalls";
-import '../styles/moviefilterStyle.css';
+import { getmoviescall} from "../apicalls";
+import "../styles/moviefilterStyle.css";
+import Movieresult from "./Movieresult";
 
 export default function Movielist() {
   const [searchText, setSearchtext] = useState("");
-  const [limit, setlimit] = useState("");
-  const [sortData, setSortdata] = useState("");
-  const [sortOrder, setSortorder] = useState("");
-  const [skipData, setSkipdata] = useState("");
+  const [limit, setlimit] = useState();
+  const [sortData, setSortdata] = useState("genres");
+  const [sortOrder, setSortorder] = useState("asc");
+  const [skipData, setSkipdata] = useState();
+  const [movielist, setmovielist] = useState([]);
 
-  function getmovies() {
-    // axios
-    //   .get("http://34.208.44.89:3006/movies", {
-    //     params: {
-    //       limit: limit,
-    //       sort: sortData,
-    //       sortOrder: sortOrder,
-    //       searchText: searchText,
-    //       skip: skipData,
-    //     },
-    //   })
-    //   .then((res) => console.log(res.data));
-   // const {data} = useQuery(['movies'],getmoviescall)
- //  getmoviescall();
-   }
+  // const {data:movie} = useQuery(["movies-list"], getmoviescall);
+  // console.log("movie", movie.data[0].title);
+//  const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+//   // movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
+
+//   // console.log("movielist",movielist)
+ 
+
+  function getmovies(e) {
+    e.preventDefault();
+    console.log([
+      parseInt(limit),
+      sortData,
+      sortOrder,
+      searchText,
+      parseInt(skipData),
+    ]);
+    // getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+    const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+    movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
   
+    
+   
+  }
+  console.log("movielist",movielist)
   return (
     <div className="moviecontainerStyle">
       <div className="moviesubcontainerStyle">
@@ -52,23 +63,22 @@ export default function Movielist() {
         </select>
         <select
           className="form-select movieselectStyle"
-          aria-label="Default select example"
           value={sortOrder}
           onChange={(e) => setSortorder(e.target.value)}
         >
-          <option selected value="asc">asc</option>
+          <option value="asc">asc</option>
           <option value="desc">desc</option>
         </select>
         <input
           className="form-control movieselectStyle"
-          type="text"
+          type="number"
           placeholder="limit"
           value={limit}
           onChange={(e) => setlimit(e.target.value)}
         />
         <input
           className="form-control movieselectStyle"
-          type="text"
+          type="number"
           placeholder="skip"
           value={skipData}
           onChange={(e) => setSkipdata(e.target.value)}
@@ -81,6 +91,16 @@ export default function Movielist() {
         >
           Search
         </button>
+      </div>
+      <div>
+      {movielist != null ? 
+      <>
+           {movielist.map(item => {
+            return <Movieresult title={item['title']} poster={item['poster']} plot={item['plot']}/>
+          })}
+          </>
+ 
+      : null}
       </div>
     </div>
   );
