@@ -39,32 +39,30 @@ const vname = { name:name,password:password,age:parseInt(age)}
 }
 
 
-export const getmoviescall = ({
-  limit,
-  sortData ="genres",
-  sortOrder = "asc",
-  searchText,
-  skipData,
-}) => {
-  console.log(limit,sortData,sortOrder,searchText,skipData)
-  const params = { sort: sortData, sortOrder: sortOrder };
-  if (limit) params["limit"] = limit;
-  if (searchText) params["searchText"] = searchText;
-  if (skipData) params["skip"] = skipData;
-  return axiosUrl
-    .get("/movies", {
-      headers: { Authorization: `Bearer ${token}` },
-      params,
-    })
-    
-};
-
-
 export const getusercall = () => {
 
   return axiosUrl.get("/user/currentuser", {
      headers: { Authorization: `Bearer ${token}` },
    })
  }
+
+ export const getmoviescall = ({
+  queryKey: [
+    ,
+    { limit, sortData = "genres", sortOrder = "asc", searchText = "", skipData },
+  ],
+}) => {
+ 
+  return axiosUrl
+    .get("/movies", {
+      headers: { Authorization: `Bearer ${token}` },
+      params:{limit : limit ?? 12,
+      sort: sortData || 'genres',
+      sortOrder: sortOrder || 'asc',
+      searchText: searchText || undefined,
+      skip:skipData },
+    })
+    
+};
 
  

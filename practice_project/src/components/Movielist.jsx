@@ -1,96 +1,41 @@
 import "../styles/moviefilterStyle.css";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
-import axios from "axios";
-
 import { Suspense, useState } from "react";
-import { getmoviescall } from "../apicalls";
 import "../styles/moviefilterStyle.css";
 import Movieresult from "./Movieresult";
 
 
 
-export default function Movielist() {
+export default function Movielist({onChange,movielist}) {
+
   const [searchText, setSearchtext] = useState("");
   const [limit, setlimit] = useState(12);
   const [sortData, setSortdata] = useState("genres");
   const [sortOrder, setSortorder] = useState("asc");
   const [page, setPage] = useState(1);
   
-  
-
-  const queryClient = useQueryClient();
-  
-  const { data: movielist, isLoading } = useQuery(
-    ["movies-list"],
-    getmoviescall,
-    {
-      useErrorBoundary: true,
-      suspense: true,
-      staleTime: Infinity,
-      
-    }
-  );
-
-  //  console.log("movie-", movielist.data.map(item => item));
-  //  const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-  //   movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
-
-  // console.log("movielist",movielist)
 
   function getmovies(e) {
     e.preventDefault();
    
-    // getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-
-
-    const movie = getmoviescall({
-      limit,
-      sortData,
-      sortOrder,
-      searchText,
-      skipData:(page-1)*limit,
-    });
-    movie.then((body) => {
-      //console.log(body);
-      queryClient.setQueryData(["movies-list"], body);
-    });
-     
+    onChange({ limit, sortData, sortOrder, searchText, skipData:(page-1)*limit });
+  
   }
 
 
   function nextpage(e) {
     e.preventDefault();
-    console.log("page changed");
-    const movie = getmoviescall({
-      limit,
-      sortData,
-      sortOrder,
-      searchText,
-      skipData:(page)*limit,
-    });
-    movie.then((body) => {
-    //  console.log(body);
-      queryClient.setQueryData(["movies-list"], body);
-    });
+    
+    onChange({ limit, sortData, sortOrder, searchText, skipData:(page)*limit });
   }
   function previouspage(e) {
     e.preventDefault();
     console.log("page changed");
-    const movie = getmoviescall({
-      limit,
-      sortData,
-      sortOrder,
-      searchText,
-      skipData:(page-1)*limit,
-    });
-    movie.then((body) => {
-     // console.log(body);
-      queryClient.setQueryData(["movies-list"], body);
-    });
+   
+    onChange({ limit, sortData, sortOrder, searchText, skipData:(page-1)*limit });
   }
 
-  //console.log("movielist", movielist);
+  console.log("movielist", movielist);
   return (
     <div className="moviecontainerStyle">
       <div className="moviesubcontainerStyle">
@@ -151,11 +96,11 @@ export default function Movielist() {
             <div className="row">
               {movielist.data.map((item) => {
                 return (
-                  
+                  //console.log("item",item._id),
                   <Suspense fallback={<p>loding....</p>}>
                     
                     <Movieresult
-                      key={item.id}
+                      key={item._id}
                       title={item["title"]}
                       poster={item["poster"]}
                       plot={item["plot"]}

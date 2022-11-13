@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navigate} from "react-router-dom";
 import Movielist from "../components/Movielist";
+import Movielistitem from "../components/Movielistitem";
 import Userlogo from "../components/Userlogo";
 
 
@@ -20,7 +21,7 @@ export default function Dashboard() {
           </nav>
          <ErrorBoundary fallback={<p>something went wrong</p>}>
           <Suspense fallback={<p>loding....</p>}>
-            <Movielist />
+            <Movielistitem />
           </Suspense>
         </ErrorBoundary> 
         </div>
