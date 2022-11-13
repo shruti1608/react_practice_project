@@ -40,13 +40,7 @@ export default function Movielist() {
 
   function getmovies(e) {
     e.preventDefault();
-    console.log([
-      parseInt(limit),
-      sortData,
-      sortOrder,
-      searchText,
-      (page-1)*limit,
-    ]);
+   
     // getmoviescall({limit,sortData,sortOrder,searchText,skipData})
 
 
@@ -96,7 +90,7 @@ export default function Movielist() {
     });
   }
 
-  console.log("movielist", movielist);
+  //console.log("movielist", movielist);
   return (
     <div className="moviecontainerStyle">
       <div className="moviesubcontainerStyle">

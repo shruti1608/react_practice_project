@@ -29,18 +29,6 @@ export const sigincall = ([email, password]) => {
     });
 };
 
-// export const getmoviescall = () => {
- 
-//   return axiosUrl
-//     .get("/movies", {
-//       headers: { Authorization: `Bearer ${token}` },
-//       params:{
-//         sort:"genres",sortOrder:"asc"
-//       }
-      
-//     })
-    
-// };
 
 export const updateuser = ([name,password,age]) => {
 const vname = { name:name,password:password,age:parseInt(age)}
@@ -50,26 +38,6 @@ const vname = { name:name,password:password,age:parseInt(age)}
       })
 }
 
-
-
-// export const getmoviescall = ({
-//   limit,
-//   sortData = "genres",
-//   sortOrder = "asc",
-//   searchText = "",
-//   skipData,
-// }) => {
-//   const params = { sort: sortData, sortOrder: sortOrder };
-//   if (limit) params["limit"] = limit;
-//   if (searchText) params["searchText"] = searchText;
-//   if (skipData) params["skip"] = skipData;
-//   return axiosUrl
-//     .get("/movies", {
-//       headers: { Authorization: `Bearer ${token}` },
-//       params,
-//     })
-    
-// };
 
 export const getmoviescall = ({
   limit,
@@ -99,3 +67,4 @@ export const getusercall = () => {
    })
  }
 
+ 
