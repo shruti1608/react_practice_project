@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import "../styles/loginStyle.css";
 import { NavLink,useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import {  sigincall } from "../apicalls";
+import { Usercontext } from "../components/Usercontext";
 
 export default function Login() {
   const [password, setPassword] = useState("");
@@ -11,11 +12,17 @@ export default function Login() {
   const [emailError, setemailError] = useState("");
 
   const navigate = useNavigate();
+  const [user,setuser] = useContext(Usercontext);
+
   const siginMutation = useMutation(sigincall,{
+  
     onSuccess:(data,variable)=>{console.log(variable,data);
-    
+      setuser(variable);
+      console.log("in login",user);
       navigate('/dashboard')
-    }
+    }, useErrorBoundary: true,
+    suspense: true,
+    
   })
 
   const handleValidation = (event) => {

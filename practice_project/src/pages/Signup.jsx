@@ -2,7 +2,7 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import {signupcall} from '../apicalls.jsx';
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/signupStyle.css";
 
 export default function Signup() {
@@ -15,7 +15,15 @@ export default function Signup() {
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
 
-  const signupMutate = useMutation(signupcall);
+  const navigate = useNavigate();
+
+  const signupMutate = useMutation(signupcall,{
+    onSuccess:(data,variable)=>{console.log(variable,data);
+    
+      navigate('/')
+    }, useErrorBoundary: true,
+    suspense: true,
+  });
 
   function handleValidation() {
     if (name === "") {

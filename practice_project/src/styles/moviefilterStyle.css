@@ -7,11 +7,18 @@
     flex-direction: row
 }
 .movieinputStyle {
-    margin-right: 50px
+    margin-right: 50px;
+    box-shadow: 1px 1px lightcoral;
 }
 .movieselectStyle {
     margin-left: 10px;
     margin-right: 10px;
     height: 50px;
     width: 80px;
+    box-shadow: 1px 1px lightcoral;
+}
+.paginationStyle{
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
 }

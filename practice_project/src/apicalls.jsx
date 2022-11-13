@@ -7,7 +7,7 @@ const axiosUrl = axios.create({
 })
 
 export const signupcall = ([age, name, email, password]) => {
-  axiosUrl
+ return axiosUrl
     .post("/auth/signup", {
       age: parseInt(age),
       name: name,
@@ -18,7 +18,7 @@ export const signupcall = ([age, name, email, password]) => {
 };
 
 export const sigincall = ([email, password]) => {
-  axiosUrl
+ return axiosUrl
     .post("/auth/login", {
       username: email,
       password: password,
@@ -93,6 +93,7 @@ export const getmoviescall = ({
 
 
 export const getusercall = () => {
+
   return axiosUrl.get("/user/currentuser", {
      headers: { Authorization: `Bearer ${token}` },
    })

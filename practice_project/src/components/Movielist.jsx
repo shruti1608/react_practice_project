@@ -1,30 +1,42 @@
-import { useQuery ,useQueryClient} from "@tanstack/react-query";
+import "../styles/moviefilterStyle.css";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
 import axios from "axios";
 
-import { useState } from "react";
-import { getmoviescall} from "../apicalls";
+import { Suspense, useState } from "react";
+import { getmoviescall } from "../apicalls";
 import "../styles/moviefilterStyle.css";
 import Movieresult from "./Movieresult";
 
 
+
 export default function Movielist() {
   const [searchText, setSearchtext] = useState("");
-  const [limit, setlimit] = useState();
+  const [limit, setlimit] = useState(12);
   const [sortData, setSortdata] = useState("genres");
   const [sortOrder, setSortorder] = useState("asc");
-  const [skipData, setSkipdata] = useState();
- 
+  const [page, setPage] = useState(1);
+  
+  
 
   const queryClient = useQueryClient();
+  
+  const { data: movielist, isLoading } = useQuery(
+    ["movies-list"],
+    getmoviescall,
+    {
+      useErrorBoundary: true,
+      suspense: true,
+      staleTime: Infinity,
+      
+    }
+  );
 
- const {data:movielist} = useQuery(["movies-list"], getmoviescall);
- 
-//  console.log("movie-", movielist.data.map(item => item));
-//  const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-//   movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
+  //  console.log("movie-", movielist.data.map(item => item));
+  //  const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+  //   movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
 
   // console.log("movielist",movielist)
- 
 
   function getmovies(e) {
     e.preventDefault();
@@ -33,24 +45,64 @@ export default function Movielist() {
       sortData,
       sortOrder,
       searchText,
-      parseInt(skipData),
+      (page-1)*limit,
     ]);
-    getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-    const movie =   getmoviescall({limit,sortData,sortOrder,searchText,skipData})
-   // movie.then(res =>{ console.log(res.data);setmovielist(res.data)})
-   movie.then((body) =>  {console.log(body);
-     queryClient.setQueryData(["movies-list"],body)
-  })
-  
+    // getmoviescall({limit,sortData,sortOrder,searchText,skipData})
+
+
+    const movie = getmoviescall({
+      limit,
+      sortData,
+      sortOrder,
+      searchText,
+      skipData:(page-1)*limit,
+    });
+    movie.then((body) => {
+      //console.log(body);
+      queryClient.setQueryData(["movies-list"], body);
+    });
+     
   }
 
-  
-  console.log("movielist",movielist)
+
+  function nextpage(e) {
+    e.preventDefault();
+    console.log("page changed");
+    const movie = getmoviescall({
+      limit,
+      sortData,
+      sortOrder,
+      searchText,
+      skipData:(page)*limit,
+    });
+    movie.then((body) => {
+    //  console.log(body);
+      queryClient.setQueryData(["movies-list"], body);
+    });
+  }
+  function previouspage(e) {
+    e.preventDefault();
+    console.log("page changed");
+    const movie = getmoviescall({
+      limit,
+      sortData,
+      sortOrder,
+      searchText,
+      skipData:(page-1)*limit,
+    });
+    movie.then((body) => {
+     // console.log(body);
+      queryClient.setQueryData(["movies-list"], body);
+    });
+  }
+
+  console.log("movielist", movielist);
   return (
     <div className="moviecontainerStyle">
       <div className="moviesubcontainerStyle">
         <input
           className="form-control movieinputStyle"
+          style={{width:"300rem"}}
           type="text"
           placeholder="Search Text"
           value={searchText}
@@ -87,8 +139,8 @@ export default function Movielist() {
           className="form-control movieselectStyle"
           type="number"
           placeholder="skip"
-          value={skipData}
-          onChange={(e) => setSkipdata(e.target.value)}
+          value={page}
+          onChange={(e) => setPage(e.target.value)}
         />
         <button
           className="btn btn-primary"
@@ -100,16 +152,41 @@ export default function Movielist() {
         </button>
       </div>
       <div>
-      {movielist != null ? 
-      <><div className="row">
-           {movielist.data.map(item => {
-            return <Movieresult title={item['title']} poster={item['poster']} plot={item['plot']}/>
-           
-          })}
-           </div>
+        {movielist != null ? (
+          <>
+            <div className="row">
+              {movielist.data.map((item) => {
+                return (
+                  
+                  <Suspense fallback={<p>loding....</p>}>
+                    
+                    <Movieresult
+                      key={item.id}
+                      title={item["title"]}
+                      poster={item["poster"]}
+                      plot={item["plot"]}
+                      id={item["_id"]}
+                      year={item["year"]}
+                      rating={item["imdb"]["rating"]}
+                    />
+                  </Suspense>
+                );
+              })}
+            </div>
+            <div className="paginationStyle">
+              <button onClick={previouspage}>
+                {" "}
+                <TfiAngleLeft color="lightcoral" size={"1rem"} />
+              </button>
+              <button onClick={nextpage}>
+                {" "}
+                <TfiAngleRight color="lightcoral" />
+              </button>
+            </div>
           </>
- 
-      : null}
+        ) : (
+          <p>Loding...</p>
+        )}
       </div>
     </div>
   );
