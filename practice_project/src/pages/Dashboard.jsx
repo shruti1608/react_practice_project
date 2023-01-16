@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navigate} from "react-router-dom";
-import Movielist from "../components/Movielist";
 import Movielistitem from "../components/Movielistitem";
 import Userlogo from "../components/Userlogo";
 
